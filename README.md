@@ -9,6 +9,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 | Version | Tag | Upstream commit |
 |---------|-----|-----------------|
 | v2.22.0 | [`v2.22.0`](https://github.com/chainguard-actions/int128-docker-manifest-create-action/tree/v2.22.0) | [`126c2b2`](https://github.com/int128/docker-manifest-create-action/commit/126c2b2195800ebc112cffe9ad6c2e2cce16eff2) |
+| v2.23.0 | [`v2.23.0`](https://github.com/chainguard-actions/int128-docker-manifest-create-action/tree/v2.23.0) | [`849ca6a`](https://github.com/int128/docker-manifest-create-action/commit/849ca6aa2ccb372f3279267f42541c527c5213dd) |
 
 ## Privacy
 
