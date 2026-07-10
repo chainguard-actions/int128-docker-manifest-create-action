@@ -1,0 +1,51 @@
+name: Test push manifest to local registry
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Set up Docker Buildx
+        run: docker buildx create --use
+
+      - name: Pull and push source images to local registry
+        run: |
+          # Pull a small public image and re-tag it as two "platform" images in local registry
+          docker pull alpine:3.18
+          docker tag alpine:3.18 localhost:5000/myimage:amd64
+          docker push localhost:5000/myimage:amd64
+          docker tag alpine:3.18 localhost:5000/myimage:arm64
+          docker push localhost:5000/myimage:arm64
+
+      - id: action
+        name: Run action to create manifest
+        uses: .
+        with:
+          push: 'true'
+          tags: |
+            localhost:5000/myimage:latest
+          sources: |
+            localhost:5000/myimage:amd64
+            localhost:5000/myimage:arm64
+
+      - name: Assert digest output is set
+        env:
+          DIGEST: ${{ steps.action.outputs.digest }}
+        run: |
+          echo "digest: '$DIGEST'"
+          if [ -z "$DIGEST" ]; then
+            echo "FAIL: expected a digest but got empty string"
+            exit 1
+          fi
+          if ! echo "$DIGEST" | grep -qE '^sha256:[a-f0-9]{64}$'; then
+            echo "FAIL: digest does not look like a valid sha256 digest: $DIGEST"
+            exit 1
+          fi
+          echo "PASS: digest is set and looks valid: $DIGEST"
