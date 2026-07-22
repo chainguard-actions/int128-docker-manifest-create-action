@@ -1,4 +1,4 @@
-name: Test dry-run with index annotations
+name: Test dry-run mode with index annotations
 on:
   workflow_dispatch:
 jobs:
@@ -8,7 +8,7 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Set up Docker Buildx
-        run: docker buildx create --use
+        run: docker buildx create --use --name test-builder-annotations
 
       - id: action
         name: Run action in dry-run mode with annotations
@@ -16,18 +16,19 @@ jobs:
         with:
           push: 'false'
           index-annotations: |
-            org.opencontainers.image.title=My Test Image
-            org.opencontainers.image.description=A test image for CI
+            org.opencontainers.image.title=Test Image
+            org.opencontainers.image.description=A test multi-arch image
           sources: |
-            alpine:3.18
+            alpine:3.18.0@sha256:c0d488a800e4127c334ad20d61d7bc21b4097540327217dfab52262adc02380c
+            alpine:3.18.0@sha256:25fad2a32ad1f6f510e528448ae1ec69a28ef81916a004d3629874104f8a7f70
 
-      - name: Assert no digest output (dry-run does not produce digest)
+      - name: Assert no digest output (dry-run with annotations does not produce digest)
         env:
           DIGEST: ${{ steps.action.outputs.digest }}
         run: |
           echo "digest: '$DIGEST'"
           if [ -n "$DIGEST" ]; then
-            echo "FAIL: expected empty digest in dry-run mode with annotations, got: $DIGEST"
+            echo "FAIL: expected empty digest in dry-run mode, got: $DIGEST"
             exit 1
           fi
           echo "PASS: digest is empty as expected for dry-run with annotations"
