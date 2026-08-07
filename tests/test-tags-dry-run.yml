@@ -1,0 +1,24 @@
+name: Test tags input (dry run)
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        with:
+          push: 'false'
+          tags: |
+            ghcr.io/example/myimage:latest
+            ghcr.io/example/myimage:1.0.0
+          sources: |
+            ghcr.io/example/myimage:amd64
+            ghcr.io/example/myimage:arm64
+      - name: Assert action completed (dry run with tags)
+        env:
+          DIGEST: ${{ steps.action.outputs.digest }}
+        run: |
+          echo "digest: $DIGEST"
+          echo "PASS: action completed dry-run with tags input"
