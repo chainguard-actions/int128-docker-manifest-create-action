@@ -1,4 +1,4 @@
-name: Test basic dry-run (push=false)
+name: Test dry-run with index annotations
 on:
   workflow_dispatch:
 jobs:
@@ -10,6 +10,9 @@ jobs:
         uses: .
         with:
           push: 'false'
+          index-annotations: |
+            org.opencontainers.image.title=my-test-image
+            org.opencontainers.image.description=A test image
           sources: |
             alpine:3.18
       - name: Assert digest is empty (dry-run does not set digest)
@@ -21,4 +24,4 @@ jobs:
             echo "FAIL: expected digest to be empty for dry-run, got: $DIGEST"
             exit 1
           fi
-          echo "PASS: digest is empty as expected for dry-run"
+          echo "PASS: action completed successfully with annotations in dry-run mode"

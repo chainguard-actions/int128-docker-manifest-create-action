@@ -1,4 +1,4 @@
-name: Test basic dry-run (push=false)
+name: Test dry-run with multiple sources
 on:
   workflow_dispatch:
 jobs:
@@ -12,6 +12,7 @@ jobs:
           push: 'false'
           sources: |
             alpine:3.18
+            alpine:3.17
       - name: Assert digest is empty (dry-run does not set digest)
         env:
           DIGEST: ${{ steps.action.outputs.digest }}
@@ -21,4 +22,4 @@ jobs:
             echo "FAIL: expected digest to be empty for dry-run, got: $DIGEST"
             exit 1
           fi
-          echo "PASS: digest is empty as expected for dry-run"
+          echo "PASS: action completed successfully with multiple sources in dry-run mode"
