@@ -1,0 +1,30 @@
+name: Test dry-run mode with index annotations
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - id: action
+        name: Run action in dry-run mode with annotations
+        uses: .
+        with:
+          push: 'false'
+          index-annotations: |
+            org.opencontainers.image.title=My Test Image
+            org.opencontainers.image.description=A test image
+          sources: |
+            alpine:3.18
+
+      - name: Assert digest is empty in dry-run mode with annotations
+        env:
+          DIGEST: ${{ steps.action.outputs.digest }}
+        run: |
+          echo "digest: '$DIGEST'"
+          if [ -n "$DIGEST" ]; then
+            echo "FAIL: expected empty digest in dry-run mode, got: $DIGEST"
+            exit 1
+          fi
+          echo "PASS: digest is empty as expected in dry-run mode with annotations"

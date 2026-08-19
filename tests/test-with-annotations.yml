@@ -1,4 +1,4 @@
-name: Test basic usage (push disabled, dry-run)
+name: Test with index annotations (push disabled)
 on:
   workflow_dispatch:
 jobs:
@@ -15,7 +15,10 @@ jobs:
           sources: |
             alpine:3.18
           tags: |
-            example.com/test/myimage:latest
+            example.com/test/myimage:annotated
+          index-annotations: |
+            org.opencontainers.image.title=Test Image
+            org.opencontainers.image.description=A test multi-arch image
       - name: Assert action completed (digest is empty when push=false)
         env:
           DIGEST: ${{ steps.action.outputs.digest }}
@@ -25,4 +28,4 @@ jobs:
             echo "FAIL: expected digest to be empty when push=false"
             exit 1
           fi
-          echo "PASS: digest is empty as expected for dry-run"
+          echo "PASS: action completed with annotations in dry-run mode"

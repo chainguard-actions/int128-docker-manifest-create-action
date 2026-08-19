@@ -1,4 +1,4 @@
-name: Test basic usage (push disabled, dry-run)
+name: Test dry-run mode (push false)
 on:
   workflow_dispatch:
 jobs:
@@ -6,23 +6,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Set up Docker Buildx
-        run: docker buildx create --use
+
       - id: action
+        name: Run action in dry-run mode with public image
         uses: .
         with:
           push: 'false'
           sources: |
             alpine:3.18
-          tags: |
-            example.com/test/myimage:latest
-      - name: Assert action completed (digest is empty when push=false)
+
+      - name: Assert digest is empty in dry-run mode
         env:
           DIGEST: ${{ steps.action.outputs.digest }}
         run: |
           echo "digest: '$DIGEST'"
           if [ -n "$DIGEST" ]; then
-            echo "FAIL: expected digest to be empty when push=false"
+            echo "FAIL: expected empty digest in dry-run mode, got: $DIGEST"
             exit 1
           fi
-          echo "PASS: digest is empty as expected for dry-run"
+          echo "PASS: digest is empty as expected in dry-run mode"
