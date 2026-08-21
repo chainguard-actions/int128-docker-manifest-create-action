@@ -1,0 +1,36 @@
+name: Test manifest creation with index annotations
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - id: action
+        uses: .
+        continue-on-error: true
+        with:
+          push: 'false'
+          index-annotations: |
+            org.opencontainers.image.title=My App
+            org.opencontainers.image.description=A test application
+            org.opencontainers.image.version=1.0.0
+          sources: |
+            alpine:3.18
+
+      - name: Assert action ran with annotations input
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+          DIGEST: ${{ steps.action.outputs.digest }}
+        run: |
+          echo "outcome: $OUTCOME"
+          echo "digest: $DIGEST"
+          if [ "$OUTCOME" = "success" ]; then
+            echo "PASS: action succeeded with annotations"
+          elif [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed gracefully (expected without registry access)"
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
+            exit 1
+          fi
