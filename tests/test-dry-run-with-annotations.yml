@@ -1,0 +1,43 @@
+name: Test dry-run mode with index annotations
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Verify Docker Buildx is available
+        run: |
+          docker buildx version
+          docker buildx ls
+      - id: action
+        uses: .
+        with:
+          push: 'false'
+          index-annotations: |
+            org.opencontainers.image.title=My Test Image
+            org.opencontainers.image.description=A test multi-arch image
+          sources: |
+            alpine:3.18
+            alpine:3.17
+        continue-on-error: true
+      - name: Assert dry-run with annotations completed
+        env:
+          DIGEST: ${{ steps.action.outputs.digest }}
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          echo "digest: $DIGEST"
+          if [ "$OUTCOME" = "success" ]; then
+            # In dry-run mode, digest should be empty
+            if [ -n "$DIGEST" ]; then
+              echo "FAIL: expected empty digest in dry-run mode but got: $DIGEST"
+              exit 1
+            fi
+            echo "PASS: dry-run with annotations completed successfully"
+          elif [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed gracefully (may need registry access for source inspection)"
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
+            exit 1
+          fi

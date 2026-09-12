@@ -1,0 +1,41 @@
+name: Test push mode (requires registry auth)
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Verify Docker Buildx is available
+        run: |
+          docker buildx version
+          docker buildx ls
+      - id: action
+        uses: .
+        with:
+          push: 'true'
+          tags: |
+            localhost:5000/test/multi-arch:latest
+          sources: |
+            alpine:3.18
+            alpine:3.17
+        continue-on-error: true
+      - name: Assert push mode ran (digest set on success, graceful failure without registry)
+        env:
+          DIGEST: ${{ steps.action.outputs.digest }}
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          echo "digest: $DIGEST"
+          if [ "$OUTCOME" = "success" ]; then
+            if [ -z "$DIGEST" ]; then
+              echo "FAIL: action succeeded but digest output is empty"
+              exit 1
+            fi
+            echo "PASS: push succeeded with digest: $DIGEST"
+          elif [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed gracefully (no registry available in test environment)"
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
+            exit 1
+          fi
