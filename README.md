@@ -15,6 +15,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 | v2.26.0 | [`v2.26.0`](https://github.com/chainguard-actions/int128-docker-manifest-create-action/tree/v2.26.0) | [`1e15cac`](https://github.com/int128/docker-manifest-create-action/commit/1e15cac7af24af7153ff7968c09072d61bb4456b) |
 | v2.27.0 | [`v2.27.0`](https://github.com/chainguard-actions/int128-docker-manifest-create-action/tree/v2.27.0) | [`5e40f15`](https://github.com/int128/docker-manifest-create-action/commit/5e40f15c10aaa54f5d2bc91864e2708e11ad629f) |
 | v2.28.0 | [`v2.28.0`](https://github.com/chainguard-actions/int128-docker-manifest-create-action/tree/v2.28.0) | [`6edb434`](https://github.com/int128/docker-manifest-create-action/commit/6edb43463bd4878b8cee224ca274378a3635d78f) |
+| v2.29.0 | [`v2.29.0`](https://github.com/chainguard-actions/int128-docker-manifest-create-action/tree/v2.29.0) | [`a118e9f`](https://github.com/int128/docker-manifest-create-action/commit/a118e9fe12455375d4810aa318c20e6dba77288e) |
 
 ## Privacy
 
