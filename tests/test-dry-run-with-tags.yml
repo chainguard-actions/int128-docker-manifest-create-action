@@ -1,0 +1,33 @@
+name: Test dry run with tags (push false)
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        with:
+          push: 'false'
+          tags: |
+            localhost:5000/example/multiarch:latest
+            localhost:5000/example/multiarch:v1.0.0
+          sources: |
+            docker.io/library/busybox:1.36
+      - name: Assert dry run succeeded with tags and digest is empty
+        env:
+          ACTUAL: ${{ steps.action.outputs.digest }}
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          echo "digest: $ACTUAL"
+          if [ "$OUTCOME" != "success" ]; then
+            echo "FAIL: expected success"
+            exit 1
+          fi
+          if [ -n "$ACTUAL" ]; then
+            echo "FAIL: expected empty digest for dry run (tags must not be pushed)"
+            exit 1
+          fi
+          echo "PASS"
