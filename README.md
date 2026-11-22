@@ -17,6 +17,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 | v2.28.0 | [`v2.28.0`](https://github.com/chainguard-actions/int128-docker-manifest-create-action/tree/v2.28.0) | [`6edb434`](https://github.com/int128/docker-manifest-create-action/commit/6edb43463bd4878b8cee224ca274378a3635d78f) | [`HARDENING.md`](https://github.com/chainguard-actions/int128-docker-manifest-create-action/blob/v2.28.0/HARDENING.md) |
 | v2.29.0 | [`v2.29.0`](https://github.com/chainguard-actions/int128-docker-manifest-create-action/tree/v2.29.0) | [`a118e9f`](https://github.com/int128/docker-manifest-create-action/commit/a118e9fe12455375d4810aa318c20e6dba77288e) | [`HARDENING.md`](https://github.com/chainguard-actions/int128-docker-manifest-create-action/blob/v2.29.0/HARDENING.md) |
 | v2.30.0 | [`v2.30.0`](https://github.com/chainguard-actions/int128-docker-manifest-create-action/tree/v2.30.0) | [`d6ac360`](https://github.com/int128/docker-manifest-create-action/commit/d6ac360314337bbfb870747d9616b83118acb330) | [`HARDENING.md`](https://github.com/chainguard-actions/int128-docker-manifest-create-action/blob/v2.30.0/HARDENING.md) |
+| v2.31.0 | [`v2.31.0`](https://github.com/chainguard-actions/int128-docker-manifest-create-action/tree/v2.31.0) | [`3017ee3`](https://github.com/int128/docker-manifest-create-action/commit/3017ee3111145ac278bd27bf53b934f73def55af) | [`HARDENING.md`](https://github.com/chainguard-actions/int128-docker-manifest-create-action/blob/v2.31.0/HARDENING.md) |
 
 ## Privacy
 
